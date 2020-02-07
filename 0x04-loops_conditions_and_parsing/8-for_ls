@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Script that displays files in current directory without numbers
+
+for files in *; do
+    echo "$files" | cut -d '-' -f2
+done
