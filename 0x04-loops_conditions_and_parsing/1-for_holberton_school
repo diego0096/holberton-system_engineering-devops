@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+#Script that uses a for loop
+for a in {1..10}
+do
+	echo "Holberton School"
+done
