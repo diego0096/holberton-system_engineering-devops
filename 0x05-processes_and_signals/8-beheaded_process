@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Script to 7-highlander, infinity loop script with trap SIGTERM
+pkill -9 -f ./7-highlander
