@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Sets up an nginx web server
+sudo apt-get install -y nginx
+echo "Holberton School" | sudo tee /var/www/html/index.nginx-debian.html
+sudo service nginx start
