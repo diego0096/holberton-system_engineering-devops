@@ -1,4 +1,5 @@
-# Puppet script to kill a process
-exec {'killmenow':
-  command => '/usr/bin/pkill --full killmenow'
+#Exec kill
+exec { 'pkill':
+    command =>  'pkill -f ./killmenow',
+    path    => '/usr/bin/',
 }
