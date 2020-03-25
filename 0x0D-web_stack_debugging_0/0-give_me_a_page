@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
 # debugging an apache server
 
-sudo service apache2 restart
+sudo apt-get -y update
+sudo apt-get -y install apache2
+sudo service apache2 start
