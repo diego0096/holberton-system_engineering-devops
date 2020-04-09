@@ -7,6 +7,8 @@ global
         user haproxy
         group haproxy
         daemon
+        maxconn 2048
+        tune.ssl.default-dh-param 2048
 
         # Default SSL material locations
         ca-base /etc/ssl/certs
@@ -17,7 +19,6 @@ global
         #  https://hynek.me/articles/hardening-your-web-servers-ssl-ciphers/
         ssl-default-bind-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS
         ssl-default-bind-options no-sslv3
-        tune.ssl.default-dh-param 2048
 
 defaults
         log     global
@@ -34,24 +35,27 @@ defaults
         errorfile 502 /etc/haproxy/errors/502.http
         errorfile 503 /etc/haproxy/errors/503.http
         errorfile 504 /etc/haproxy/errors/504.http
+        option forwardfor
+        option http-server-close
 
 frontend www-http
-         bind *:80
-         reqadd X-Forwarded-Proto:\ http
-         default_backend www-backend
+        bind *:80
+        reqadd X-Forwarded-Proto:\ http
+        mode http
+        default_backend web-backend
 
-frontend www-https
-         bind *:443 ssl crt /etc/ssl/certs/www.diegoqu.tech.pem
-         reqadd X-Forwarded-Proto:\ https
-         acl letsencrypt-acl path_beg /.well-known/acme-challenge/
-         use_backend letsencrypt-backend if letsencrypt-acl
-         default_backend www-backend
-
-backend www-backend
+backend web-backend
         redirect scheme https if !{ ssl_fc }
         balance roundrobin
-        server 1276-web-01 35.237.50.4:80 check
-        server 1276-web-02 54.221.40.23:80 check
+        server 1174-web-01 35.237.50.4:80 check
+        server 1174-web-02 54.221.40.23:80 check
+
+frontend www-https
+        bind *:443 ssl crt /etc/haproxy/certs/diegoqu.tech.pem
+        reqadd X-Forwarded-Proto:\ https
+        acl letsencrypt-acl path_beg /.well-known/acme-challenge/
+        use_backend letsencrypt-backend if letsencrypt-acl
+        default_backend web-backend
 
 backend letsencrypt-backend
         server letsencrypt 127.0.0.1:54321
