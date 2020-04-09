@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Bash script to dig url and return ip
+if [ $# -eq 1 ]; then
+    for x in www lb-01 web-01 web-02; do
+    R=$(dig "$x"."$1" | grep -A1 "ANSWER SECTION:" | tail -1 | awk '{print $4}')
+    IP=$(dig "$x"."$1" | grep -A1 "ANSWER SECTION:" | tail -1 | awk '{print $5}')
+    echo "The subdomain $x is a $R record and points to $IP"
+    done
+elif [ $# -eq 2 ]; then
+    R=$(dig "$2"."$1" | grep -A1 "ANSWER SECTION:" | tail -1 | awk '{print $4}')
+    IP=$(dig "$2"."$1" | grep -A1 "ANSWER SECTION:" | tail -1 | awk '{print $5}')
+    echo "The subdomain $2 is a $R record and points to $IP"
+fi
