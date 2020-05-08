@@ -14,5 +14,5 @@ def top_ten(subreddit):
         children = data.get('data').get('children')
         for child in children[0:10]:
             print(child.get('data').get('title'))
-        except:
-            print(None)
+    except:
+        print(None)
